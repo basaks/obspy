@@ -297,6 +297,7 @@ OriginType = Enum([
     "macroseismic",
     "rupture start",
     "rupture end",
+    "not reported",
 ])
 """
 Origin type. Allowed values are:
@@ -307,6 +308,7 @@ Origin type. Allowed values are:
 * ``"macroseismic"``
 * ``"rupture start"``
 * ``"rupture end"``
+* ``"not reported"
 """
 
 OriginUncertaintyDescription = Enum([
