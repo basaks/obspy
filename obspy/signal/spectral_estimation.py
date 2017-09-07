@@ -689,9 +689,22 @@ class PPSD(object):
         # prepare the list of traces to go through
         if isinstance(stream, Trace):
             stream = Stream([stream])
+        if not stream:
+            msg = 'Empty stream object provided to PPSD.add()'
+            warnings.warn(msg)
+            return False
         # select appropriate traces
-        stream = stream.select(id=self.id,
-                               sampling_rate=self.sampling_rate)
+        stream = stream.select(id=self.id)
+        if not stream:
+            msg = 'No traces with matching SEED ID in provided stream object.'
+            warnings.warn(msg)
+            return False
+        stream = stream.select(sampling_rate=self.sampling_rate)
+        if not stream:
+            msg = ('No traces with matching sampling rate in provided stream '
+                   'object.')
+            warnings.warn(msg)
+            return False
         # save information on available data and gaps
         self.__insert_data_times(stream)
         self.__insert_gap_times(stream)
@@ -1611,7 +1624,8 @@ class PPSD(object):
         :type grid: bool, optional
         :param grid: Enable/disable grid in histogram plot.
         :type show: bool, optional
-        :param show: Enable/disable immediately showing the plot.
+        :param show: Enable/disable immediately showing the plot. If
+            ``show=False``, then the matplotlib figure handle is returned.
         :type max_percentage: float, optional
         :param max_percentage: Maximum percentage to adjust the colormap. The
             default is 30% unless ``cumulative=True``, in which case this value
